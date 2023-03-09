@@ -4,7 +4,7 @@ import { auth } from "../middleware/auth";
 import { IRequest } from "../interfaces/user";
 
 const router: Router = express.Router();
-export const userRouter = router
+export const userRouter = router;
 
 // Create New User
 router.post("/user", async (req: Request, res: Response) => {
@@ -22,6 +22,7 @@ router.post("/user", async (req: Request, res: Response) => {
 // Login User
 router.post("/user/login", async (req: Request, res: Response) => {
   const { email } = req.body;
+
   try {
     const user = await User.findOne({ email });
     const token = await user.generateAuthToken();
@@ -37,7 +38,7 @@ router.get("/users/me", auth, async (req: IRequest, res: Response) => {
 });
 
 // Logout User
-router.post("/users/logout", auth, async (req: IRequest, res) => {
+router.post("/users/logout", auth, async (req: IRequest, res: Response) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
@@ -52,8 +53,10 @@ router.post("/users/logout", auth, async (req: IRequest, res) => {
 
 // Delete User
 router.delete("/user/:id", async (req: Request, res: Response) => {
+  const userId = req.params.id
+  
   try {
-    const user = await User.findByIdAndRemove({ _id: req.params.id });
+    const user = await User.findByIdAndRemove({ _id: userId });
     res.status(201).send({ user });
   } catch (e) {
     res.status(400).send(e);
