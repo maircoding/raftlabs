@@ -107,7 +107,7 @@ router.delete("/resource/:id", auth, async (req: IRequest, res: Response) => {
     });
     
     if (!resource) throw Error('Resource Not Found')
-    res.status(204).send(resource);
+    res.status(204).send('Resource Removed');
   } catch (Error) {
     res.status(400).send({ Error: "Delete Failed" });
   }

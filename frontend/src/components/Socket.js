@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
+import { useNavigate } from 'react-router-dom'
 
 const token = sessionStorage.getItem("key");
+const user = sessionStorage.getItem("user");
 
 const socket = io("http://localhost:3002", {
   query: { token: token },
 });
 
-function Socket({ user }) {
+function Socket() {  
+  const navigate = useNavigate()
+
   const [messageOut, setMessageOut] = useState("");
   const [messagesIn, setMessagesIn] = useState([]);
   const [room, setRoom] = useState("");
-
+  console.log(user, token);
   useEffect(() => {
     socket.on("message", (data) => {
       setMessagesIn((prevMessages) => [...prevMessages, data]);
@@ -20,7 +24,7 @@ function Socket({ user }) {
     return () => {
       socket.off("messages").off();
     };
-  }, []);
+  }, [navigate]);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -28,12 +32,13 @@ function Socket({ user }) {
     setMessageOut("");
   };
 
+
   return (
     <div className="">
       <div className="bg-gradient-to-r flex justify-center items-center from-pink-500 to-blue-500 h-screen">
         <div class="bg-white flex justify-center w-4/6 h-full gap-4 place-content-center">
           <div class="grid grid-cols-1 flex bottom-0 w-4/6 gap-4 place-content-center relative">
-            <h1 className="absolute top-5 mx-auto text-3xl">Hello {user.name}</h1>
+            <h1 className="absolute top-5 mx-auto text-3xl">Hello {user}</h1>
             <div className="absolute top-20 w-full">
               <div className="" spacing={2}>
               {messagesIn.map((message, index) => (<div className="bg-slate-100 border w-full rounded" key={index}>{message}</div>))}
