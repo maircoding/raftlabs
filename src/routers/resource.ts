@@ -18,7 +18,7 @@ router.post("/resource", auth, async (req: IRequest, res: Response) => {
     await resource.save();
     res.status(201).send({ resource });
   } catch (e) {
-    res.status(400).send({ Error: e });
+    res.status(400).send({ Error: 'Resource creation failed'});
   }
 });
 
@@ -41,7 +41,7 @@ router.get("/resource/:id", auth, async (req: IRequest, res: Response) => {
       if (!resource) return res.status(404).send({Error: 'Resource not found'});
       else { myCache.set(resourceId, resource)}
       
-      res.send(resource);
+      res.status(201).send(resource);
       console.log('From Database');
     }
   } catch (e) {
@@ -89,7 +89,7 @@ router.patch("/resource/:id", auth, async (req: IRequest, res: Response) => {
     });
 
     await resource.save();
-    res.send(resource);
+    res.status(200).send(resource);
   } catch (error) {
     res.status(400).send({ "Update Failed": error });
   }
@@ -105,9 +105,10 @@ router.delete("/resource/:id", auth, async (req: IRequest, res: Response) => {
       _id: resourceId,
       userId
     });
-
-    res.status(200).send(resource);
-  } catch (e) {
-    res.status(400).send({ e: "Delete Failed" });
+    
+    if (!resource) throw Error('Resource Not Found')
+    res.status(204).send(resource);
+  } catch (Error) {
+    res.status(400).send({ Error: "Delete Failed" });
   }
 });
