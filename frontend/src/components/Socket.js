@@ -8,13 +8,13 @@ const socket = io("http://localhost:3002", {
 });
 
 function Socket({ user }) {
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messageOut, setMessageOut] = useState("");
+  const [messagesIn, setMessagesIn] = useState([]);
   const [room, setRoom] = useState("");
 
   useEffect(() => {
     socket.on("message", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
+      setMessagesIn((prevMessages) => [...prevMessages, data]);
     });
 
     return () => {
@@ -24,8 +24,8 @@ function Socket({ user }) {
 
   const sendMessage = (event) => {
     event.preventDefault();
-    socket.emit("message", message, room);
-    setMessage("");
+    socket.emit("message", messageOut, room);
+    setMessageOut("");
   };
 
   return (
@@ -36,7 +36,7 @@ function Socket({ user }) {
             <h1 className="absolute top-5 mx-auto text-3xl">Hello {user.name}</h1>
             <div className="absolute top-20 w-full">
               <div className="" spacing={2}>
-              {messages.map((message, index) => (<div className="bg-slate-100 border w-full rounded" key={index}>{message}</div>))}
+              {messagesIn.map((message, index) => (<div className="bg-slate-100 border w-full rounded" key={index}>{message}</div>))}
             </div>
             </div>
             <form className="absolute flex bottom-5" onSubmit={sendMessage}>
@@ -44,8 +44,8 @@ function Socket({ user }) {
                 <input
                   className="bg-slate-200 h-10 m-1 p-5 rounded w-full"
                   placeholder="Message"
-                  value={message}
-                  onChange={(event) => setMessage(event.target.value)}
+                  value={messageOut}
+                  onChange={(event) => setMessageOut(event.target.value)}
                 />
                 <input
                   className="bg-slate-200 h-10 m-1 w-full p-5 rounded"
