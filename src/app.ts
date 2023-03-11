@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import { userRouter } from "./routers/user";
 import { resourceRouter } from "./routers/resource";
 import "./db/db";
+import "./websockets/socketsManager"
 
 const app: Application = express();
 const port = 3000;
