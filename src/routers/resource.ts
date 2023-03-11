@@ -62,9 +62,9 @@ router.get("/resource", auth, async (req: IRequest, res) => {
 
   try {
     const resources = await Resource.find({ userId: req.user._id.toString() })
-    .skip(Number(req.query.skip) || 0)
-    .limit(Number(req.query.limit) || 0)
-    .sort(sort);
+      .skip(Number(req.query.skip) || 0)
+      .limit(Number(req.query.limit) || 0)
+      .sort(sort);
 
     res.status(200).send(resources);
   } catch (error) {

@@ -23,4 +23,4 @@ const resourceSchema = new Schema<IResource>(
   }
 );
 
-export const Resource = model<IResource>("Task", resourceSchema);
+export const Resource = model<IResource>("Resource", resourceSchema);
